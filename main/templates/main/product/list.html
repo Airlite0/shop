@@ -1,0 +1,51 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+
+{% block title %}Товари{% endblock %}
+
+{% block content %}
+<h2 class="text-3xl font-bold mb-6">Товари{% if category %} у {{ category.name }}{% endif %}</h2>
+
+<!-- Пошук і сортування -->
+<form method="get" class="flex flex-col sm:flex-row gap-4 mb-6">
+    <input 
+        type="text" 
+        name="q" 
+        placeholder="Пошук товарів..." 
+        value="{{ request.GET.q }}" 
+        class="border border-gray-300 rounded px-4 py-2 flex-1"
+    >
+    <select name="sort" class="border border-gray-300 rounded px-4 py-2">
+        <option value="">Сортувати за</option>
+        <option value="price_asc" {% if request.GET.sort == 'price_asc' %}selected{% endif %}>Ціна ↑</option>
+        <option value="price_desc" {% if request.GET.sort == 'price_desc' %}selected{% endif %}>Ціна ↓</option>
+        <option value="name" {% if request.GET.sort == 'name' %}selected{% endif %}>Назва</option>
+    </select>
+    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+        Застосувати
+    </button>
+</form>
+
+<!-- Сітка товарів -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {% for product in products %}
+        <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-4 flex flex-col">
+            <a href="{{ product.get_absolute_url }}">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-48 object-cover rounded">
+                {% else %}
+                    <img src="{% static 'images/default-product.jpg' %}" alt="{{ product.name }}" class="w-full h-48 object-cover rounded">
+                {% endif %}
+                <h3 class="text-lg font-semibold mt-4">{{ product.name }}</h3>
+            </a>
+            <p class="text-gray-700 mt-2">${{ product.price }}</p>
+            <button class="mt-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                Додати в кошик
+            </button>
+        </div>
+    {% empty %}
+        <p>Немає товарів у цій категорії.</p>
+    {% endfor %}
+</div>
+{% endblock %}

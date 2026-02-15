@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Мій магазин{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">
+                <a href="{% url 'main:product_list' %}">Мій магазин</a>
+            </h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a class="hover:text-blue-500" href="{% url 'main:product_list' %}">Головна</a></li>
+                    {% for category in categories %}
+                        <li>
+                            <a class="hover:text-blue-500" href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white shadow mt-8">
+        <div class="container mx-auto px-4 py-4 text-center text-gray-500">
+            © 2026 Мій магазин. Всі права захищені.
+        </div>
+    </footer>
+
+</body>
+</html>
